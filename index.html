@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUthrift - Quality Educational Books</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Razorpay Integration Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body class>
+    <header>
+        <nav class="container">
+            <div class="logo">EDUthrift</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#books">Books</a></li>
+            </ul>
+            <div class="header-right">
+                <button id="cartBtn" class="cart-btn">
+                    🛒 Cart
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+                <button class="hamburger" id="hamburgerBtn">
+                    &#9776;
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="hero" id="home">
+            <h1>EDUthrift</h1>
+            <p>Quality Educational Books for 11th & 12th Grade Students</p>
+            <p>📚 Clean • No Markings • Great Condition • Student Prices</p>
+        </section>
+
+        <section class="books-section" id="books">
+            <h2 class="section-title">Available Books</h2>
+            <div class="filters">
+                <input type="text" id="searchInput" placeholder="Search by title...">
+                <select id="subjectFilter">
+                    <option value="all">All Subjects</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Biology">Biology</option>
+                    <option value="English">English</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div id="successMessage" class="success-message"></div>
+            <div class="books-grid" id="booksGrid"></div>
+        </section>
+
+        <section class="admin-panel" id="adminPanel">
+            <h2 class="section-title">📚 Add New Book</h2>
+            <form id="bookForm">
+                <div class="form-group"><label for="bookTitle">Book Title *</label><input type="text" id="bookTitle" required></div>
+                <div class="form-group"><label for="bookSubject">Subject *</label><select id="bookSubject" required><option value="" disabled selected>Select Subject</option><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option><option value="Biology">Biology</option><option value="English">English</option><option value="Other">Other</option></select></div>
+                <div class="form-group"><label for="bookMrp">Original Price (MRP) *</label><input type="number" id="bookMrp" required min="1"></div>
+                <div class="form-group"><label for="bookPrice">Your Selling Price (₹) *</label><input type="number" id="bookPrice" required min="1"></div>
+                <div class="form-group"><label for="bookImageUrl">Book Image URL</label><input type="url" id="bookImageUrl"></div>
+                <div class="form-group"><label for="bookDescription">Description</label><textarea id="bookDescription" rows="3"></textarea></div>
+                <button type="submit" class="btn-primary">📚 Add Book to Store</button>
+            </form>
+        </section>
+    </main>
+
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span id="closeCartBtn" class="close">&times;</span>
+            <h2>🛒 Your Cart</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total" id="cartTotal"></div>
+            <button id="checkoutBtn" class="btn-primary" style="width: 100%; margin-top: 1rem;">
+                💳 Proceed to Payment
+            </button>
+        </div>
+    </div>
+
+    <button id="adminToggleBtn" class="admin-toggle" title="Admin Panel">⚙️</button>
+    <script src="script.js"></script>
+</body>
+</html>```
+
