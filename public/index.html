@@ -5,14 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDUthrift - Quality Thrifted Educational Books</title>
     <link rel="stylesheet" href="style.css">
-
-     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
-
-
-    <!-- Razorpay Integration Script -->
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
-<body class>
+<body>
     <header>
         <nav class="container">
             <div class="logo">EDUthrift</div>
@@ -39,7 +35,8 @@
             <p>📚 Clean • No Markings • Great Condition • Student Prices</p>
         </section>
 
-        <section class="books-section" id="books">
+        <!-- The main book grid section -->
+        <section class="books-section" id="booksSection">
             <h2 class="section-title">Available Books</h2>
             <div class="filters">
                 <input type="text" id="searchInput" placeholder="Search by title...">
@@ -57,6 +54,37 @@
             <div class="books-grid" id="booksGrid"></div>
         </section>
 
+        <!-- === NEW: PRODUCT DETAIL "PAGE" SECTION === -->
+        <section class="product-detail-section" id="productDetailSection" style="display: none;">
+            <!-- Content will be injected by JavaScript -->
+            <button id="backToBooksBtn" class="back-btn">← Back to All Books</button>
+            <div class="product-detail-layout">
+                <div class="product-gallery">
+                    <div class="main-image-container">
+                        <img src="" alt="Main product image" id="mainProductImage">
+                    </div>
+                    <div class="thumbnail-images" id="thumbnailContainer">
+                        <!-- Thumbnails will be dynamically inserted here -->
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h2 class="product-detail-title" id="productDetailTitle"></h2>
+                    <div class="product-detail-price-container">
+                        <span class="product-detail-mrp" id="productDetailMrp"></span>
+                        <span class="product-detail-price" id="productDetailPrice"></span>
+                        <span class="product-detail-sale-tag">Sale</span>
+                    </div>
+                    <div class="product-detail-cart-controls" id="productDetailCartControls">
+                        <!-- Quantity selector / Add to cart button will be inserted here -->
+                    </div>
+                    <div class="product-description-details" id="productDetailDescription">
+                        <!-- Description details will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Panel Section -->
         <section class="admin-panel" id="adminPanel">
             <h2 class="section-title">📚 Add New Book</h2>
             <form id="bookForm">
@@ -64,27 +92,43 @@
                 <div class="form-group"><label for="bookSubject">Subject *</label><select id="bookSubject" required><option value="" disabled selected>Select Subject</option><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option><option value="Biology">Biology</option><option value="English">English</option><option value="Other">Other</option></select></div>
                 <div class="form-group"><label for="bookMrp">Original Price (MRP) *</label><input type="number" id="bookMrp" required min="1"></div>
                 <div class="form-group"><label for="bookPrice">Your Selling Price (₹) *</label><input type="number" id="bookPrice" required min="1"></div>
-                <div class="form-group"><label for="bookImageUrl">Book Image URL</label><input type="url" id="bookImageUrl"></div>
-                <div class="form-group"><label for="bookDescription">Description</label><textarea id="bookDescription" rows="3"></textarea></div>
+                <div class="form-group"><label for="bookStock">Stock Quantity *</label><input type="number" id="bookStock" required min="0"></div>
+                <div class="form-group"><label for="bookImageUrls">Book Image URLs (separate with a comma)</label><textarea id="bookImageUrls" rows="3" placeholder="https://url1.com/image.jpg, https://url2.com/image.jpg"></textarea></div>
+                <div class="form-group"><label for="bookDescription">Detailed Specs (one per line, format: Key: Value)</label><textarea id="bookDescription" rows="4" placeholder="e.g.,&#10;Condition: Very Good&#10;Pages: 450&#10;Markings: None&#10;Damage: Slight fold on cover"></textarea></div>
                 <button type="submit" class="btn-primary">📚 Add Book to Store</button>
             </form>
         </section>
     </main>
 
+    <!-- Modals (Cart and Edit) are still here -->
     <div id="cartModal" class="modal">
         <div class="modal-content">
             <span id="closeCartBtn" class="close">&times;</span>
             <h2>🛒 Your Cart</h2>
             <div id="cartItems"></div>
             <div class="cart-total" id="cartTotal"></div>
-            <button id="checkoutBtn" class="btn-primary" style="width: 100%; margin-top: 1rem;">
-                💳 Proceed to Payment
-            </button>
+            <button id="checkoutBtn" class="btn-primary" style="width: 100%; margin-top: 1rem;">💳 Proceed to Payment</button>
+        </div>
+    </div>
+    <div id="editBookModal" class="modal">
+        <div class="modal-content">
+            <span id="closeEditModalBtn" class="close">&times;</span>
+            <h2>✏️ Edit Book</h2>
+            <form id="editBookForm">
+                <input type="hidden" id="editBookId">
+                <div class="form-group"><label for="editBookTitle">Book Title *</label><input type="text" id="editBookTitle" required></div>
+                <div class="form-group"><label for="editBookSubject">Subject *</label><select id="editBookSubject" required><option value="" disabled>Select Subject</option><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option><option value="Biology">Biology</option><option value="English">English</option><option value="Other">Other</option></select></div>
+                <div class="form-group"><label for="editBookMrp">Original Price (MRP) *</label><input type="number" id="editBookMrp" required min="1"></div>
+                <div class="form-group"><label for="editBookPrice">Your Selling Price (₹) *</label><input type="number" id="editBookPrice" required min="1"></div>
+                <div class="form-group"><label for="editBookStock">Stock Quantity *</label><input type="number" id="editBookStock" required min="0"></div>
+                <div class="form-group"><label for="editBookImageUrls">Book Image URLs (comma-separated)</label><textarea id="editBookImageUrls" rows="3"></textarea></div>
+                <div class="form-group"><label for="editBookDescription">Detailed Specs</label><textarea id="editBookDescription" rows="4"></textarea></div>
+                <button type="submit" class="btn-primary">💾 Save Changes</button>
+            </form>
         </div>
     </div>
 
     <button id="adminToggleBtn" class="admin-toggle" title="Admin Panel">⚙️</button>
     <script src="script.js"></script>
 </body>
-</html>```
-
+</html>
